@@ -1,0 +1,97 @@
+{% extends '../layout/frontend.html' %} {% load static %}{% load utilidades %}{% block title %} Mi carrito {% endblock %}{% block content %}
+
+
+  <div class="container">
+    
+    <div class="row">
+       <div class="col-12">
+           
+<div class="card">
+    <header class="card-header">
+                <h4 class="card-title mt-2">Mi carrito</h4>
+                {% include 'layout/flash.html' %}
+            </header>
+ <div class="table-responsive">
+    <form name="form_carrito" method="post" action=" ">
+        {% csrf_token %}
+
+<table class="table table-hover shopping-cart-wrap">
+<thead class="text-muted">
+<tr>
+  <th scope="col" colspan="4" style="text-align: right;">{% if not cuantos is 0 %}
+                        <a class="btn btn-sm btn-outline-danger" href="javascript:void(0);" title="Vaciar carro" onclick="confirmaAlert('¿Realmente desea vaciar su carrito?', '{% url 'carro_vaciar' %}')"><i class="fas fa-shopping-cart"></i> Vaciar carro</a>
+                        {% endif %}<hr/></th>
+</tr>
+<tr>
+  <th scope="col">Producto</th>
+  <th scope="col" width="120">Cantidad</th>
+  <th scope="col" width="120">Precio</th>
+  <th scope="col" width="200" class="text-right">Acciones</th>
+</tr>
+</thead>
+<tbody>
+    {% for dato in datos %}
+<tr>
+    <td>
+<figure class="media">
+    <div class="img-wrap"><img src="{% static 'upload/producto/' %}{{dato.producto.foto}}" width="100" height="100" alt="{{dato.producto.nombre}}" /></div>
+    <figcaption class="media-body">
+        <h6 class="title text-truncate">{{dato.producto.nombre}} </h6>
+        <dl class="dlist-inline small">
+          <dt>Categoría: </dt>
+          <dd><a class="color_negro" title="{{dato.producto.producto_categoria.nombre}}">{{dato.producto.producto_categoria.nombre}}</a></dd>
+        </dl>
+    </figcaption>
+</figure> 
+    </td>
+    <td> 
+        <select class="form-control" name="cantidad_{{forloop.counter}}" id="cantidad_{{forloop.counter}}" onchange="modificarCantidadProductoCarro('{{dato.id}}', this.value);">
+            {% with ''|center:dato.producto.stock as range %}
+            {% for _ in range %}
+                <option value="{{ forloop.counter }}" {% if dato.cantidad is forloop.counter %} selected="true" {% endif %}> {{ forloop.counter }}</option>
+            {% endfor %}
+            {% endwith %}
+        </select>
+    </td>
+    <td> 
+        <div class="price-wrap"> 
+            <var class="price">${{dato.producto.precio|numberFormat}}</var>         </div>
+    </td>
+    <td class="text-right"> 
+   
+    <a href="javascript:void(0);" title="Quitar del carro" onclick="confirmaAlert('¿Realmente desea quitar este producto del carrito?', '{% url 'carro_quitar' dato.producto_id %}');" class="btn btn-outline-danger"> × Remove</a>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</form>
+</div>
+
+</div> 
+
+<div class="card">
+    <div class="card-body">
+        {% if not cuantos is 0 %}
+    <div class="shopping-cart-footer">
+        <div class="row">
+            <div class="col-4">
+                <div class="column"><a class="btn btn-outline-secondary" href="{% url 'home_incio' %}" title="Seguir comprando"><i class="fas fa-arrow-left"></i>&nbsp;Seguir comprando</a></div>        
+            </div>
+            
+            <div class="col-4"></div>
+            <div class="col-4">
+            <div class="column"><a class="btn btn-success" href="{% url 'carro_pagar' %}" title=" Ir a pagar"><i class="fas fa-money-bill-wave"></i> Ir a pagar</a></div></div>
+        </div>
+        
+    </div>
+    {% endif %}
+    </div>
+</div>
+
+       </div>
+  
+    </div> 
+  </div>
+
+{% endblock %}

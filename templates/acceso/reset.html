@@ -1,0 +1,33 @@
+{% extends '../layout/frontend.html' %} 
+{% load static %}
+{% load utilidades %}
+{% block title %} Inicio {% endblock %}
+{% block content %}
+ <!-- Section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+              
+                   <h4 class="card-title mt-2">Restablecer contraseña</h4>
+                    {% include "layout/flash.html" %}
+                  <form name="form_reset" method="post" action="{% url 'acceso_reset' %}">
+    {% csrf_token %}
+     
+    <div class="form-group">
+        <label>E-Mail</label>
+        {{form.correo}}
+    </div> 
+    
+    <div class="form-group">
+        <button type="button" class="btn btn-primary " onclick="sendReset();"><i class="fas fa-envelope"></i> Enviar  </button>
+    </div>      
+                                             
+</form>
+<hr/>
+<p>
+      <a href="{% url 'acceso_login' %}" title="Login" class="color_negro">Login</a>
+              |
+            <a href="{% url 'acceso_registro' %}" title="Regístrate" class="color_negro">Regístrate</a>
+</p>
+            </div>
+        </section>
+{% endblock %}

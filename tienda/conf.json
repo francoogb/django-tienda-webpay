@@ -1,0 +1,19 @@
+{
+    "debug":true,
+	"base_url":"http://127.0.0.1:8000/",
+    "user":"root",
+    "password":"12345678",
+	"server":"localhost",
+    "puerto":3306,
+    "bd":"tienda",
+    "ruta":"C:/Users/Franco/Desktop/Semestral/Djnago Curso/Webpay/", 
+    "ruta2":"C:/Users/Franco/Desktop/Semestral/Djnago Curso/Webpay/tienda/",
+    "smtp":"smtp.gmail.com",
+	"smtp_puerto":587,
+	"email":"tuemail@gmail.com",
+	"email_password":"tupassword",
+    "webpay_url":"https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions",
+	"webpay_id":"597055555532",
+	"webpay_secret":"579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"
+        
+}

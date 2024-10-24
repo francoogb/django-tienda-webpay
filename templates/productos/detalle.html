@@ -1,0 +1,107 @@
+{% extends '../layout/frontend.html' %} 
+{% load static %}
+{% load utilidades %}
+{% block title %} Detalle producto {{datos.nombre}} {% endblock %}
+{% block content %}
+<section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+    <div class="row gx-4 gx-lg-5 align-items-center">
+        <div class="col-md-6">
+        <!--galería-->
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for foto in fotos %}
+    <div class="carousel-item {% if forloop.counter0 is 0 %}active{% endif %}">
+      <img src="{% static 'upload/producto/' %}{{foto.foto}}" class="d-block w-100" alt="{{datos.nombre}}" />
+    </div>
+   {% endfor %} 
+    
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+        <!--/galería-->   
+        </div>
+                    <div class="col-md-6">
+                        <div class="small mb-1">Categoría: <a href="">{{datos.producto_categoria.nombre}}</a></div>
+                        <h1 class="display-5 fw-bolder">{{datos.nombre}}</h1>
+                        <div class="fs-5 mb-5">
+                            <span class="text-decoration-line-through">${{datos.precio_antes|numberFormat}}</span>
+                            <span>${{datos.precio|numberFormat }}</span>
+                        </div>
+    <p class="lead">{{datos.descripcion}}</p>
+    <br>
+          {% if datos.stock is 0 %}
+          <span class="alert alert-danger">PRODUCTO SIN STOCK</span>
+          {% else %}
+          <div class="d-flex">
+            Cantidad
+          </div>
+          <br>
+          <div class="d-flex">
+                                
+            <select class="form-control form-control-sm" id="cantidad" >
+
+            {% with ''|center:datos.stock as range %}
+          {% for _ in range %}
+          <option value="{{ forloop.counter }}">
+          {{ forloop.counter }}
+        </option>
+        {% endfor %} 
+              {% endwith %}
+        </select>
+   </div>
+   <hr/>
+   <div class="d-flex">
+   	<a href="javascript:void(0);" class="boton_cotizar" onclick="agregarAlCarro();" title="Agregar al carro"><i class="fas fa-cart-plus"></i> Agregar al carro</a>
+   </div>
+    {% endif %}
+    <hr/>
+   <div class="d-flex">
+    <a href="https://api.whatsapp.com/send?phone={{4|getMetadata}}&text=Hola%20necesito%20informaci%C3%B3n%20del%20producto%20{{datos.nombre}}" class="boton_cotizar_whatsapp" title="Pedir por whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Pedir por whatsapp</a>
+   </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+<section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5 mt-5">
+                <h2 class="fw-bolder mb-4">Productos relacionados</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    {% for relacionado in relacionados %}
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{% static 'upload/producto/' %}{{relacionado.foto}}" alt="{{relacionado.nombre}}" />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{relacionado.nombre}}</h5>
+                                    <!-- Product price-->
+                                    ${{relacionado.precio}}
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'productos_detalle' relacionado.id relacionado.slug %}" title="{{relacionado.nombre}}"><i class="fas fa-check"></i> Ver Detalle</a></div>
+                            </div>
+                        </div>
+                    </div>
+                   {% endfor %}
+                </div>
+            </div>
+        </section>
+        <form name="agregar_al_carro" action="{% url 'carro_crear' %}" method="post">
+          {% csrf_token %}
+           <input type="hidden" name="id" id="id" value="{{datos.id}}" />
+           <input type="hidden" name="cantidad" />
+         </form>
+      
+{% endblock %}
